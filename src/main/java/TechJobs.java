@@ -1,3 +1,5 @@
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,13 +57,15 @@ public class TechJobs {
             } else { // choice is "search"
 
                 // How does the user want to search (e.g. by skill or employer)
-                String searchField = getUserSelection("Search by:", columnChoices);
+                String searchField = getUserSelection("Search by:", columnChoices).toLowerCase();
 
                 // What is their search term?
                 System.out.println("\nSearch term:");
-                String searchTerm = in.nextLine();
+                String searchTerm = in.nextLine().toLowerCase();
 
-                if (searchField.equals("all")) {
+                if (searchTerm.isEmpty()) {
+                    System.out.print("No results");
+                } else if (searchField.equals("all")) {
                     printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
@@ -119,7 +123,16 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-
-        System.out.println("printJobs is not implemented yet");
+        Scanner input = new Scanner(System.in);
+        ArrayList<HashMap<String, String>> allsJob = JobData.findAll();
+        for (int i = 0; i < allsJob.size(); i++) {
+            System.out.println("*****");
+            for (Map.Entry<String, String> entry : allsJob.get(i).entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                System.out.println(key + ": " + value);
+            }
+            System.out.println("*****\n");
+        }
     }
 }
