@@ -57,15 +57,13 @@ public class TechJobs {
             } else { // choice is "search"
 
                 // How does the user want to search (e.g. by skill or employer)
-                String searchField = getUserSelection("Search by:", columnChoices).toLowerCase();
+                String searchField = getUserSelection("Search by:", columnChoices);
 
                 // What is their search term?
                 System.out.println("\nSearch term:");
-                String searchTerm = in.nextLine().toLowerCase();
+                String searchTerm = in.nextLine();
 
-                if (searchTerm.isEmpty()) {
-                    System.out.print("No results");
-                } else if (searchField.equals("all")) {
+                if (searchField.equals("all")) {
                     printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
@@ -123,16 +121,22 @@ public class TechJobs {
 
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
-        Scanner input = new Scanner(System.in);
-        ArrayList<HashMap<String, String>> allsJob = JobData.findAll();
-        for (int i = 0; i < allsJob.size(); i++) {
-            System.out.println("*****");
-            for (Map.Entry<String, String> entry : allsJob.get(i).entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                System.out.println(key + ": " + value);
+        if(someJobs.isEmpty()) {
+            System.out.print("No Results");
+        } else {
+            System.out.println();
+            for (int i = 0; i < someJobs.size(); i++) {
+                System.out.println("*****");
+                for (Map.Entry<String, String> entry : someJobs.get(i).entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    System.out.println(key + ": " + value);
+                }
+                System.out.println("*****");
+                if(i != someJobs.size() - 1) {
+                    System.out.println();
+                }
             }
-            System.out.println("*****\n");
         }
     }
 }
